@@ -21,3 +21,4 @@ Comparisons are only performed on a row-by row basis of columns C,D,E. Anything 
 is non-position dependent (i.e., a value of C15 on source file matching C20 on destination is possible, witht the comment
 carried to the appropriate row of the destination file). 
 
+The .exe file and its related dependcies can be generated using the auto-py-to-exe library if needed.

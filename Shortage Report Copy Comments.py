@@ -7,7 +7,8 @@ from tkinter import *
 import os
 from openpyxl import Workbook
 import openpyxl
-
+from openpyxl.styles import *
+from copy import copy
 
 #File Handling and Setting Sheet 1 as active sheet for both workbooks
 root = tk.Tk()
@@ -52,34 +53,53 @@ for row in sheet_obj_dest:
 for row in sheet_obj_dest:
     val = row[4].value
     destE.append(val)
-for row in sheet_obj_src:
-    val = row[19].value
-    srcT.append(val)
-    
+# for row in sheet_obj_src:
+#     val = row[19].value
+#     srcT.append(val)
+for i in range(1, sheet_obj_src.max_row+1):
+    srcT.append(sheet_obj_src.cell(row = i, column = 20).value)
+
 
 
 #create list that stores 1/0 for match or no match for a row's values in C/D/E, then use that vector at the end to compare the two comments cols
-match = [0]*sheet_obj_src.max_row
+match = [None]*sheet_obj_src.max_row
 for i in range(len(srcC)):
     for j in range(len(destC)):
-        if(srcC[i] == destC[j]):
-            match[j] = srcT[i]
+        if(srcC[i] == destC[j] and destC[j] != None):
+            if match[j] == None:
+                match[j] = srcT[i]
+                new_style = copy(sheet_obj_src.cell(row = i, column = 20).style)
+                sheet_obj_dest.cell(row = j, column = 20).style = new_style
 
 for i in range(len(srcD)):
     for j in range(len(destD)):
-        if(srcD[i] == destD[j]):
-            match[j] = srcT[i]
+        if(srcD[i] == destD[j] and destD[j] != None):
+            if match[j] == None:
+                match[j] = srcT[i]
+                new_style = copy(sheet_obj_src.cell(row = i, column = 20).style)
+                sheet_obj_dest.cell(row = j, column = 20).style = new_style
+
 for i in range(len(srcE)):
     for j in range(len(destE)):
-        if(srcE[i] == destE[j]):
-            match[j] = srcT[i]
+        if(srcE[i] == destE[j] and destE[j] != None):
+            if match[j] == None:
+                match[j] = srcT[i]
+                new_style = copy(sheet_obj_src.cell(row = i, column = 20).style)
+                sheet_obj_dest.cell(row = j, column = 20).style = new_style
 
 
 #Writing comments to dest sheet *ALWAYS WRITES TO COl19 (T)
 for i in range(len(match)):
-    if (match[i] != 0):
+    if (match[i] != None):
         for j in range(1, sheet_obj_dest.max_row+1):
             sheet_obj_dest.cell(row = i+1, column = 20).value = match[i]
-sheet_obj_dest.cell(row = 1, column = 20).value = "COPIED COMMENTS"
-wb_obj_dest.save(dest_path)
+sheet_obj_dest.cell(row = 1, column = 20).value = "COPIED COMMENTS FROM PREVIOUS REPORT"
+
+
+
+
+
+
+dest_path_new = dest_path.replace(".xlsx", "")
+wb_obj_dest.save(dest_path_new + " w Comments.xlsx")
 print("Operation Completed.")

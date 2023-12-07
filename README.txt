@@ -24,3 +24,9 @@ carried to the appropriate row of the destination file).
 The .exe file and its related dependcies can be generated using the auto-py-to-exe library if needed by running the folloiwing
 command in a terminal:
 python -m auto_py_to_exe
+
+****************************
+UPDATE LOG:
+V1.1.0
+  Fixed bug where only column 'E' comments were being copied over consistently.
+  Changed behavior to create a new file titled "* w Comments.xlsx" instead of saving over the inital destination file.
